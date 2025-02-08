@@ -95,7 +95,7 @@ module.exports.DeepSeek = new AiChatAgent({
 
 module.exports.Gemini = new AiChatAgent({
   chatExecutor: new GeminiExecutor({
-    modelId: "gemini-1.5-flash",
+    modelId: "gemini-2.0-flash",
     apiKey: configVars.GEMINI_KEY,
   }),
   systemPromptTemplate,

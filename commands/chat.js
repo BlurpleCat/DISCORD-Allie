@@ -17,6 +17,14 @@ module.exports = {
           { name: "ChatGPT", value: "ChatGPT" },
           { name: "Claude", value: "Claude" },
           { name: "Mistral", value: "Mistral" },
+          { name: "Commandr", value: "Commandr" },
+          { name: "DeepSeek", value: "DeepSeek" },
+          { name: "Grok", value: "Grok" },
+          { name: "Gemini", value: "Gemini" },
+          { name: "Llama", value: "Llama" },
+          { name: "Jamba", value: "Jamba" },
+          { name: "Nova", value: "Nova" },
+          { name: "Titan", value: "Titan" },
         ),
     )
     .addStringOption((option) =>
@@ -35,23 +43,25 @@ module.exports = {
 
     const history = conversationHistory.get(interaction.channel.id) || [];
 
-    const humanMessage = { role: "user", content: message };
+    const humanMessage = {
+      role: "user",
+      content: interaction.user.username + ": " + message,
+    };
+    console.log(humanMessage);
     history.push(humanMessage);
-    console.log(history);
     const response = await agent.getResponse({ messages: history });
     history.push(response.responseMessage);
     let threadID = interaction.channel.isThread()
       ? interaction.channel.id
       : null;
 
-    // Send the original reply (keeps your format)
     await interaction.reply(
-      `${user}: ${message} \n\n ${Allie} (${model}): ${response.responseMessage.content}`,
+      `${user}: ${message} \n\n ${Allie} **(${model})**: ${response.responseMessage.content}`,
     );
     if (!interaction.channel.isThread()) {
       // Create a thread to continue the conversation
       const thread = await interaction.channel.threads.create({
-        name: `${interaction.user.username}'s chat with ${model}`,
+        name: `${message}`,
         autoArchiveDuration: 60, // Auto-closes after 1 hour
         type: ChannelType.GuildPublicThread,
         reason: `AI conversation with ${model}`,
